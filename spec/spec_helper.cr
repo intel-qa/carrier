@@ -1,2 +1,2 @@
 require "spec"
-require "../src/image-carrier"
+require "../src/image_carrier"
