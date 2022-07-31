@@ -1,10 +1,10 @@
 module Image::Carrier
 
   PIXEL_TYPES = {
-    "G" => :g,
-    "GA" => :ga,
+    "G" => :grayscale,
+    "GA" => :grayscale_alpha,
     "RGB" => :rgb,
-    "RGBA" => :rgba,
+    "RGBA" => :rgb_alpha,
   }
 
   # A grid is 2D array of `T` pixels
