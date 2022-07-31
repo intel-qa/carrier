@@ -203,7 +203,7 @@ module Image::Carrier
     end
 
     def pixel_type
-      PIXEL_TYPES[T.class.to_s.split("::").last].tap do |t|
+      PIXEL_TYPES[T.to_s.split("::").last].tap do |t|
         raise "Invalid grid type" if t.nil?
       end
     end
