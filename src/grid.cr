@@ -208,7 +208,7 @@ module Image::Carrier
       end
     end
 
-    def reduce(accumulator : U)
+    def reduce(accumulator)
       (0..@width).each do |x|
         (0..@height).each do |y|
           accumulator = yield accumulator, self[x, y]
