@@ -1,5 +1,12 @@
 module Image::Carrier
 
+  PIXEL_TYPES = {
+    "G" => :g,
+    "GA" => :ga,
+    "RGB" => :rgb,
+    "RGBA" => :rgba,
+  }
+
   # A grid is 2D array of `T` pixels
   #
   # To create a grid of size `400` x `200`
@@ -192,6 +199,12 @@ module Image::Carrier
             self[x + cx, y + cy] = grid[cx, cy].over(current)
           end
         end
+      end
+    end
+
+    def pixel_type
+      PIXEL_TYPES[T.class.to_s.split("::").last].tap do |t|
+        raise "Invalid grid type" if t.nil?
       end
     end
   end
