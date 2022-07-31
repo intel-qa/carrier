@@ -37,7 +37,7 @@ module Image::Carrier
     getter height : Int32
     getter pixels : Slice(T)
 
-    def initialize(@width, @height, color = T.new)
+    def initialize(@width = 0, @height = 0, color = T.new)
       size = @width.to_i64 * @height
       raise "The maximum size of a grid is #{Int32::MAX} total pixels" if size > Int32::MAX
 
@@ -206,6 +206,15 @@ module Image::Carrier
       PIXEL_TYPES[T.to_s.split("::").last].tap do |t|
         raise "Invalid grid type" if t.nil?
       end
+    end
+
+    def reduce(accumulator : U)
+      (0..@width).each do |x|
+        (0..@height).each do |y|
+          accumulator = yield accumulator, self[x, y]
+        end
+      end
+      accumulator
     end
   end
 end
