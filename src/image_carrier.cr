@@ -1,5 +1,5 @@
 require "./grid"
-require "./helpers"
+require "./helper"
 require "./color_model"
 require "./color_model/from_hex"
 require "./color_model/from_channels"

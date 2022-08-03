@@ -131,8 +131,8 @@ module Image::Carrier
 
     # Same as `map!`, but instead of mutating the current grid,
     # a new one is created and returned
-    def map(&block : T, Int32, Int32 -> U)
-      grid = Grid(U).new(@width, @height)
+    def map(&block)
+      grid = Grid(T).new(@width, @height)
       (0...@width).each do |x|
         (0...@height).each do |y|
           grid[x, y] = yield self[x, y], x, y
@@ -145,7 +145,7 @@ module Image::Carrier
     # applying a function `(color, x, y) -> new_color`
     # to each pixel of the current grid,
     # e.g. to invert colors
-    def map!(&block : T, Int32, Int32 -> T)
+    def map!(&block)
       (0...@width).each do |x|
         (0...@height).each do |y|
           self[x, y] = yield self[x, y], x, y
