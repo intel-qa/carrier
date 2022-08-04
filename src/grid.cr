@@ -209,16 +209,16 @@ module Image::Carrier
     end
 
     def each
-      (0..@width).each do |x|
-        (0..@height).each do |y|
+      (0...@width).each do |x|
+        (0...@height).each do |y|
           yield self[x, y], x, y
         end
       end
     end
 
     def reduce(accumulator)
-      (0..@width).each do |x|
-        (0..@height).each do |y|
+      (0...@width).each do |x|
+        (0...@height).each do |y|
           accumulator = yield accumulator, self[x, y]
         end
       end
