@@ -204,7 +204,15 @@ module Image::Carrier
 
     def pixel_type
       PIXEL_TYPES[T.to_s.split("::").last].tap do |t|
-        raise "Invalid grid type" if t.nil?
+        raise "Not a pixel grid" if t.nil?
+      end
+    end
+
+    def each
+      (0..@width).each do |x|
+        (0..@height).each do |y|
+          yield self[x, y], x, y
+        end
       end
     end
 
