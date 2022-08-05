@@ -6,6 +6,8 @@ module Image::Carrier
   # All 148 [Named CSS Colors](https://www.quackit.com/css/css_color_codes.cfm)
   # are available as constants.
   struct RGBA
+    NULL = RGBA.new
+
     getter r : UInt16
     getter g : UInt16
     getter b : UInt16
@@ -56,6 +58,8 @@ module Image::Carrier
   # All 148 [Named CSS Colors](https://www.quackit.com/css/css_color_codes.cfm)
   # are available as constants.
   struct RGB
+    NULL = RGB.new
+
     getter r : UInt16
     getter g : UInt16
     getter b : UInt16
@@ -101,6 +105,8 @@ module Image::Carrier
   # All 148 [Named CSS Colors](https://www.quackit.com/css/css_color_codes.cfm)
   # are available as constants.
   struct GA
+    NULL = GA.new
+
     getter g : UInt16
     getter a : UInt16
 
@@ -132,6 +138,8 @@ module Image::Carrier
   # All 148 [Named CSS Colors](https://www.quackit.com/css/css_color_codes.cfm)
   # are available as constants.
   struct G
+    NULL = G.new
+
     getter g : UInt16
 
     def initialize

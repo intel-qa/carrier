@@ -37,7 +37,7 @@ module Image::Carrier
     getter height : Int32
     getter pixels : Slice(T)
 
-    def initialize(@width = 0, @height = 0, color = T.new)
+    def initialize(@width = 0, @height = 0, color = T::NULL)
       size = @width.to_i64 * @height
       raise "The maximum size of a grid is #{Int32::MAX} total pixels" if size > Int32::MAX
 
