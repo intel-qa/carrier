@@ -1,5 +1,6 @@
 require "./grid"
 require "./helper"
+require "./stdlib_ext"
 require "./color_model"
 require "./color_model/from_hex"
 require "./color_model/from_channels"
