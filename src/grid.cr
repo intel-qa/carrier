@@ -50,8 +50,8 @@ module Image::Carrier
 
       @pixels = Slice.new size.to_i32, T.new
 
-      (0...@width).each do |x|
-        (0...@height).each do |y|
+      (0...@height).each do |y|
+        (0...@width).each do |x|
           color = yield({x, y})
           set x, y, color
         end
@@ -133,8 +133,8 @@ module Image::Carrier
     # a new one is created and returned
     def map(&block)
       grid = Grid(T).new(@width, @height)
-      (0...@width).each do |x|
-        (0...@height).each do |y|
+      (0...@height).each do |y|
+        (0...@width).each do |x|
           grid[x, y] = yield self[x, y], x, y
         end
       end
@@ -146,8 +146,8 @@ module Image::Carrier
     # to each pixel of the current grid,
     # e.g. to invert colors
     def map!(&block)
-      (0...@width).each do |x|
-        (0...@height).each do |y|
+      (0...@height).each do |y|
+        (0...@width).each do |x|
           self[x, y] = yield self[x, y], x, y
         end
       end
@@ -210,20 +210,28 @@ module Image::Carrier
     end
 
     def each
-      (0...@width).each do |x|
-        (0...@height).each do |y|
+      (0...@height).each do |y|
+        (0...@width).each do |x|
           yield self[x, y], x, y
         end
       end
     end
 
     def reduce(accumulator)
-      (0...@width).each do |x|
-        (0...@height).each do |y|
+      (0...@height).each do |y|
+        (0...@width).each do |x|
           accumulator = yield accumulator, self[x, y]
         end
       end
       accumulator
     end
+
+    # def to_s(io : IO)
+    #   io << "Grid{"
+    #   each do |v, x, y|
+
+    #   end
+    #   io << "}"
+    # end
   end
 end
