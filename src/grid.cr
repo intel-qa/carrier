@@ -151,6 +151,7 @@ module Image::Carrier
           self[x, y] = yield self[x, y], x, y
         end
       end
+      self
     end
 
     # Same as `map` but passes along a fourth parameter
