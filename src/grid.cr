@@ -226,12 +226,12 @@ module Image::Carrier
       accumulator
     end
 
-    # def to_s(io : IO)
-    #   io << "Grid{"
-    #   each do |v, x, y|
-
-    #   end
-    #   io << "}"
-    # end
+    def to_s(io : IO)
+      io << "Grid{"
+      each do |v, x, y|
+        io << '\t' << [x, y]
+      end
+      io << "}"
+    end
   end
 end
