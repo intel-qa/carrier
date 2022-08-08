@@ -213,11 +213,11 @@ module Image::Carrier
       case type
       when :row
         (0...@width).each do |x|
-          yield self[x, index], x
+          yield self[x, index], x, index
         end
       when :column
         (0...@height).each do |y|
-          yield self[index, y], y
+          yield self[index, y], index, y
         end
       else
         (0...@height).each do |y|
