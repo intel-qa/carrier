@@ -209,10 +209,21 @@ module Image::Carrier
       end
     end
 
-    def each
-      (0...@height).each do |y|
+    def each(type = :grid, index = Int32::MIN)
+      case type
+      when :row
         (0...@width).each do |x|
-          yield self[x, y], x, y
+          yield [x, index], x
+        end
+      when :column
+        (0...@height).each do |y|
+          yield [index, y], y
+        end
+      else
+        (0...@height).each do |y|
+          (0...@width).each do |x|
+            yield [x, y], x, y
+          end
         end
       end
     end
