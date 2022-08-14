@@ -1,5 +1,7 @@
 module Image::Carrier
 
+  # TODO: move pixel types from here to image-png
+  # don't use this until it is moved. 
   PIXEL_TYPES = {
     "G" => :grayscale,
     "GA" => :grayscale_alpha,

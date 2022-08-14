@@ -5,20 +5,20 @@ module Image::Carrier
     end
 
     # Helper method,
-    # scale a value `input`
+    # scale a of `input`
     # from `from` bits resolution
     # to 16 bits.
-    def self.scale_resolution(value, initial)
-      return value.to_u16 if initial == 16
-      (value.to_f / max_graylevel(initial) * max_graylevel).round.to_u16
+    def self.scale_resolution(of, from)
+      return of.to_u16 if from == 16
+      (of.to_f / max_graylevel(from) * max_graylevel).round.to_u16
     end
 
     # Helper method,
-    # scale a value `input`
+    # scale a of `input`
     # from `from` bits resolution
     # to `to` bits resolution.
-    def self.scale_resolution(value, initial, final)
-      (value.to_f / max_graylevel(initial) * max_graylevel(final)).round
+    def self.scale_resolution(of, from, to)
+      (of.to_f / max_graylevel(from) * max_graylevel(to)).round
     end
   end
 end

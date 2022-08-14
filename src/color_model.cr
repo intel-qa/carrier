@@ -165,5 +165,9 @@ module Image::Carrier
     def grey
       @g
     end
+
+    def scale_to(resolution)
+      Helper.scale_resolution @g, initial: 16, final: resolution
+    end
   end
 end
