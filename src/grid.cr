@@ -300,7 +300,7 @@ module Image::Carrier
             y_tile_index...y_tile_index + source[:region].height
           )
 
-          fill(destination_tile, source[:grid])
+          fill(destination_tile, source)
         end
       end
     end
