@@ -308,6 +308,10 @@ module Image::Carrier
   end
 
   struct GridRegion
+    def self.null
+      new
+    end
+
     def initialize(@x_range = 0...1, @y_range = 0...1)
     end
 
