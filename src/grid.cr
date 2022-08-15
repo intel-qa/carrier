@@ -296,8 +296,8 @@ module Image::Carrier
       (0...y_tile_count).each do |y_tile_index|
         (0...x_tile_count).each do |x_tile_index|
           destination_tile = GridRegion.new(
-            x_tile_index...x_tile_index + source.width,
-            y_tile_index...y_tile_index + source.height
+            x_tile_index...x_tile_index + source[:region].width,
+            y_tile_index...y_tile_index + source[:region].height
           )
 
           fill(destination_tile, source[:grid])
