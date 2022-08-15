@@ -267,17 +267,17 @@ module Image::Carrier
       end
     end
 
-    def fill(destination : GridRegion, source : NamedTuple(grid: Grid(T), region: GridRegion))
-      unless destination.width == source[:region].width && destination.height == source[:region].height
-        raise "Source region has different size than the destination."
-      end
+    # def fill(destination : GridRegion, source : NamedTuple(grid: Grid(T), region: GridRegion))
+    #   unless destination.width == source[:region].width && destination.height == source[:region].height
+    #     raise "Source region has different size than the destination."
+    #   end
 
-      (0...source[:region].height).each do |j|
-        (0...source[:region].width).each do |i|
-          destination[destination.left + i, destination.top + j] = source[:grid][source.left + i, source.top + j]
-        end
-      end
-    end
+    #   (0...source[:region].height).each do |j|
+    #     (0...source[:region].width).each do |i|
+    #       destination[destination.left + i, destination.top + j] = source[:grid][source.left + i, source.top + j]
+    #     end
+    #   end
+    # end
     
     # def fill(region : GridRegion)
     #   region.each do |x, y|
@@ -285,13 +285,13 @@ module Image::Carrier
     #   end
     # end
 
-    def tile(destination : GridRegion, source : GridRegion)
-      unless destination % source == {0, 0}
+    def tile(destination : GridRegion, source : NamedTuple(grid: Grid(T), region: GridRegion))
+      unless destination % source[:region] == {0, 0}
         raise "Source region doesn't fit in the destination region."
       end
 
-      x_tile_count = destination.width // source.width
-      y_tile_count = destination.height // source.height
+      x_tile_count = destination.width // source[:region].width
+      y_tile_count = destination.height // source[:region].height
 
       (0...y_tile_count).each do |y_tile_index|
         (0...x_tile_count).each do |x_tile_index|
@@ -300,7 +300,7 @@ module Image::Carrier
             y_tile_index...y_tile_index + source.height
           )
 
-          fill(destination_tile, source)
+          fill(destination_tile, source[:grid])
         end
       end
     end
