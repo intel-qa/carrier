@@ -2,6 +2,7 @@ module Image::Carrier
 
   # TODO: move pixel types from here to image-png
   # don't use this until it is moved. 
+  # Can enum be used here ?
   PIXEL_TYPES = {
     "G" => :grayscale,
     "GA" => :grayscale_alpha,
@@ -39,11 +40,11 @@ module Image::Carrier
     getter height : Int32
     getter pixels : Slice(T)
 
-    def initialize(@width = 0, @height = 0, color = T.null)
+    def initialize(@width = 0, @height = 0, cell = T.null)
       size = @width.to_i64 * @height
       raise "The maximum size of a grid is #{Int32::MAX} total pixels" if size > Int32::MAX
 
-      @pixels = Slice.new size.to_i32, color
+      @pixels = Slice.new size.to_i32, cell
     end
 
     def initialize(@width, @height, &block)
@@ -54,8 +55,8 @@ module Image::Carrier
 
       (0...@height).each do |y|
         (0...@width).each do |x|
-          color = yield({x, y})
-          set x, y, color
+          cell = yield({x, y})
+          set x, y, cell
         end
       end
     end
@@ -68,8 +69,8 @@ module Image::Carrier
 
     # Set the value of pixel `(x, y)` to `color`
     # without checking if `(x, y)` is a valid position.
-    def set(x, y, color)
-      @pixels[x + @width * y] = color
+    def set(x, y, cell)
+      @pixels[x + @width * y] = cell
     end
 
     # Short form for `get`
@@ -78,8 +79,8 @@ module Image::Carrier
     end
 
     # Short form for `set`
-    def []=(x, y, color)
-      set x, y, color
+    def []=(x, y, cell)
+      set x, y, cell
     end
 
     # Same as `get`, but if `x` ore `y` are outside of the grid,
@@ -92,8 +93,8 @@ module Image::Carrier
 
     # Same as `set`, but wrapping along the grid edges.
     # See `wrapping_get` for an example.
-    def wrapping_set(x : Int32, y : Int32, color : T)
-      self[x % @width, y % @height] = color
+    def wrapping_set(x : Int32, y : Int32, cell : T)
+      self[x % @width, y % @height] = cell
     end
 
     # Same as `get`,
@@ -106,9 +107,9 @@ module Image::Carrier
     # if it is part of the grid.
     # Returns `true` if the pixel was set successfully,
     # `false` if it was outside of the grid.
-    def safe_set(x : Int32, y : Int32, color : T) : Bool
+    def safe_set(x : Int32, y : Int32, cell : T) : Bool
       if includes_location?(x, y)
-        self[x, y] = color
+        self[x, y] = cell
         true
       else
         false
@@ -239,12 +240,122 @@ module Image::Carrier
       accumulator
     end
 
-    def to_s(io : IO)
-      io << "Grid{"
-      each do |v, x, y|
-        io << '\t' << [x, y]
+    # Is this needed?
+    # def to_s(io : IO)
+    #   io << "Grid{"
+    #   each do |v, x, y|
+    #     io << '\t' << [x, y]
+    #   end
+    #   io << "}"
+    # end
+
+    def fill(region : GridRegion, value)
+      region.each do |x, y|
+        self[x, y] = value
       end
-      io << "}"
+    end
+
+    def fill(destination : GridRegion, source : Grid(T))
+      unless destination.width == source.width && destination.height == source.height
+        raise "Source region has different size than the destination."
+      end
+
+      (0...source.height).each do |j|
+        (0...source.width).each do |i|
+          self[destination.left + i, destination.top + j] = source[i, j]
+        end
+      end
+    end
+
+    def fill(destination : GridRegion, source : NamedTuple(grid: Grid(T), region: GridRegion))
+      unless destination.width == source[:region].width && destination.height == source[:region].height
+        raise "Source region has different size than the destination."
+      end
+
+      (0...source[:region].height).each do |j|
+        (0...source[:region].width).each do |i|
+          destination[destination.left + i, destination.top + j] = source[:grid][source.left + i, source.top + j]
+        end
+      end
+    end
+    
+    # def fill(region : GridRegion)
+    #   region.each do |x, y|
+    #     self[x, y] = yield x, y
+    #   end
+    # end
+
+    def tile(destination : GridRegion, source : GridRegion)
+      unless destination % source == {0, 0}
+        raise "Source region doesn't fit in the destination region."
+      end
+
+      x_tile_count = destination.width // source.width
+      y_tile_count = destination.height // source.height
+
+      (0...y_tile_count).each do |y_tile_index|
+        (0...x_tile_count).each do |x_tile_index|
+          destination_tile = GridRegion.new(
+            x_tile_index...x_tile_index + source.width,
+            y_tile_index...y_tile_index + source.height
+          )
+
+          fill(destination_tile, source)
+        end
+      end
+    end
+
+  end
+
+  struct GridRegion
+    def initialize(@x_range = 0...1, @y_range = 0...1)
+    end
+
+    def contains?(x, y)
+      @x_range.covers?(x) && @y_range.covers?(y)
+    end
+
+    def contains?(region)
+      self.contains?(region.left, region.top) &&
+      self.contains?(region.right, region.top) &&
+      self.contains?(region.right, region.bottom) &&
+      self.contains?(region.left, region.bottom)
+    end
+
+    def width
+      @x_range.size
+    end
+
+    def height
+      @y_range.size
+    end
+
+    def left
+      @x_range.begin
+    end
+
+    def right
+      @x_range.end
+    end
+
+    def top
+      @y_range.begin
+    end
+
+    def bottom
+      @y_range.end
+    end
+
+    def %(divisor : GridRegion)
+      {width % divisor.width, height % divisor.height}
+    end
+
+    def each
+      @y_range.each do |y|
+        @x_range.each do |x|
+          yield x, y
+        end
+      end
     end
   end
 end
