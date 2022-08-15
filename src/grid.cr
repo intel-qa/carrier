@@ -249,7 +249,7 @@ module Image::Carrier
     #   io << "}"
     # end
 
-    def fill(region : GridRegion, value)
+    def fill(region : GridRegion, value : T)
       region.each do |x, y|
         self[x, y] = value
       end
@@ -257,7 +257,7 @@ module Image::Carrier
 
     def fill(destination : GridRegion, source : Grid(T))
       unless destination.width == source.width && destination.height == source.height
-        raise "Source region has different size than the destination."
+        raise "Source region has different size than the destination: #{destination.inspect}; #{source.inspect}"
       end
 
       (0...source.height).each do |j|
@@ -267,17 +267,17 @@ module Image::Carrier
       end
     end
 
-    # def fill(destination : GridRegion, source : NamedTuple(grid: Grid(T), region: GridRegion))
-    #   unless destination.width == source[:region].width && destination.height == source[:region].height
-    #     raise "Source region has different size than the destination."
-    #   end
+    def fill(destination : GridRegion, source : NamedTuple(grid: Grid(T), region: GridRegion))
+      unless destination.width == source[:region].width && destination.height == source[:region].height
+        raise "Source region has different size than the destination: #{destination.inspect}; #{source.inspect}"
+      end
 
-    #   (0...source[:region].height).each do |j|
-    #     (0...source[:region].width).each do |i|
-    #       destination[destination.left + i, destination.top + j] = source[:grid][source.left + i, source.top + j]
-    #     end
-    #   end
-    # end
+      (0...source[:region].height).each do |j|
+        (0...source[:region].width).each do |i|
+          self[destination.left + i, destination.top + j] = source[:grid][source[:region].left + i, source[:region].top + j]
+        end
+      end
+    end
     
     # def fill(region : GridRegion)
     #   region.each do |x, y|
