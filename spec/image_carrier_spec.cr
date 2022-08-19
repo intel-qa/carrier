@@ -17,7 +17,7 @@ describe Image::Carrier do
         grid = Grid(RGBA).new(size, size)
         (0...size).each do |x|
           (0...size).each do |y|
-            grid.get(x, y).should eq RGBA.new(0_u16, 0_u16, 0_u16, 0_u16)
+            grid.get(x, y).should eq RGBA.new(0_u16, 0_u16, 0_u16, UInt16::MAX)
           end
         end
       end
@@ -27,7 +27,7 @@ describe Image::Carrier do
       it "gets the color value of a particular pixel location" do
         size = 3
         canvas1 = Grid(RGBA).new(size, size)
-        canvas2 = Grid(RGBA).new(size, size) {RGBA.new(0_u16, 0_u16, 0_u16, 0_u16)}
+        canvas2 = Grid(RGBA).new(size, size) {RGBA.new(0_u16, 0_u16, 0_u16)}
 
         (0...size).each do |x|
           (0...size).each do |y|
@@ -137,7 +137,7 @@ describe Image::Carrier do
         side = 3
         other_side = 4
         canvas1 = Grid(RGBA).new(side, side)
-        canvas2 = Grid(RGBA).new(side, side, RGBA.new(0_u16, 0_u16, 0_u16, 0_u16))
+        canvas2 = Grid(RGBA).new(side, side, RGBA.new(0_u16, 0_u16, 0_u16))
         canvas3 = Grid(RGBA).new(side, side, RGBA::WHITE)
         canvas4 = Grid(RGBA).new(side, other_side, RGBA.new(0_u16, 0_u16, 0_u16, 0_u16))
         canvas5 = Grid(RGBA).new(other_side, side, RGBA.new(0_u16, 0_u16, 0_u16, 0_u16))
@@ -377,7 +377,7 @@ describe Image::Carrier do
         rgba.r.should eq 0_u16
         rgba.g.should eq 0_u16
         rgba.b.should eq 0_u16
-        rgba.a.should eq 0_u16
+        rgba.a.should eq UInt16::MAX
       end
 
     end

@@ -40,7 +40,7 @@ module Image::Carrier
     getter height : Int32
     getter pixels : Slice(T)
 
-    def initialize(@width = 0, @height = 0, cell = T.null)
+    def initialize(@width = 0, @height = 0, cell = T::NULL)
       size = @width.to_i64 * @height
       raise "The maximum size of a grid is #{Int32::MAX} total pixels" if size > Int32::MAX
 
@@ -234,20 +234,11 @@ module Image::Carrier
     def reduce(accumulator)
       (0...@height).each do |y|
         (0...@width).each do |x|
-          accumulator = yield accumulator, self[x, y]
+          accumulator = yield accumulator, self[x, y], x, y
         end
       end
       accumulator
     end
-
-    # Is this needed?
-    # def to_s(io : IO)
-    #   io << "Grid{"
-    #   each do |v, x, y|
-    #     io << '\t' << [x, y]
-    #   end
-    #   io << "}"
-    # end
 
     def fill(region : GridRegion, value : T)
       region.each do |x, y|
@@ -279,12 +270,6 @@ module Image::Carrier
       end
     end
     
-    # def fill(region : GridRegion)
-    #   region.each do |x, y|
-    #     self[x, y] = yield x, y
-    #   end
-    # end
-
     def tile(destination : GridRegion, source : NamedTuple(grid: Grid(T), region: GridRegion))
       unless destination % source[:region] == {0, 0}
         raise "Source region doesn't fit in the destination region."
@@ -304,7 +289,6 @@ module Image::Carrier
         end
       end
     end
-
   end
 
   struct GridRegion
@@ -362,4 +346,28 @@ module Image::Carrier
       end
     end
   end
+
+  module Math
+    def max(grid : Grid(T))
+      grid.reduce T::MIN do |max, v|
+        max < v ? v : max
+      end
+    end
+
+    def min(grid : Grid(T))
+      grid.reduce T::MAX do |min, v|
+        min > v ? v : min
+      end
+    end
+
+    def log(grid : Grid(T))
+
+    end
+  end
 end
+
+# struct UInt32
+#   def +(grid: Grid(T))
+    
+#   end
+# end

@@ -1,7 +1,5 @@
 struct Int32
-  def self.null
-    Int32.new(0)
-  end
+  NULL = Int32.new(0)
 end
 
 struct Proc
