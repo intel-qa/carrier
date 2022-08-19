@@ -11,9 +11,16 @@ module Image::Carrier
       {% for component in components %}
         {% parameters << "@" + component + " : UInt16" %}
         {% max_arguments << "UInt16::MAX" %}
-        {% component_abbreviations[component[0..0]] = component %}
+
+        {% if abbreviate %}
+          {% component_abbreviations[component[0..0]] = component %}
+        {% end %}
 
         getter {{component.id}} : UInt16
+      {% end %}
+
+      {% if abbreviate && (component_abbreviations.size != components.size || component_abbreviations.keys.includes?("a")) %}
+        {% abbreviate = false %}
       {% end %}
 
       {% if alpha %}
@@ -21,22 +28,9 @@ module Image::Carrier
 
         getter alpha : UInt16
       {% end %}
-      # def self.null
-      #   {{name}}.new
-      # end
 
       NULL = {{name}}.new
-
-      # def self.min
-      #   {{name}}.new
-      # end
-
       MIN = {{name}}.new
-
-      # def self.max
-      #   {{name}}.new({{max_arguments}})
-      # end
-
       MAX = {{name}}.new({{max_arguments}})
 
       def initialize
@@ -52,16 +46,18 @@ module Image::Carrier
       def initialize({{parameters.join(", ").id}})
       end
 
-      {% for abbreviation, component in component_abbreviations %}
-        def {{abbreviation.id}}
-          @{{component.id}}
-        end
-      {% end %}
+      {% if abbreviate %}
+        {% for abbreviation, component in component_abbreviations %}
+          def {{abbreviation.id}}
+            @{{component.id}}
+          end
+        {% end %}
 
-      {% if alpha %}
-        def a
-          @alpha
-        end
+        {% if alpha %}
+          def a
+            @alpha
+          end
+        {% end %}
       {% end %}
     end
   end
