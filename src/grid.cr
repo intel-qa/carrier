@@ -1,6 +1,6 @@
 module Image::Carrier
 
-  # TODO: move pixel types from here to image-png
+  # TODO: move pixel types out grid
   # don't use this until it is moved. 
   # Can enum be used here ?
   PIXEL_TYPES = {
@@ -300,7 +300,7 @@ module Image::Carrier
             y_tile_index...y_tile_index + source[:region].height
           )
 
-          fill(destination_tile, source)
+          fill destination_tile, source
         end
       end
     end

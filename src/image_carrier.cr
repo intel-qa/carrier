@@ -1,7 +1,7 @@
 require "./grid"
 require "./helper"
 require "./stdlib_ext"
-require "./color_model"
+require "./color_models"
 require "./color_model/from_hex"
 require "./color_model/from_channels"
 require "./color_model/named_colors"

@@ -357,26 +357,27 @@ describe Image::Carrier do
     describe ".new" do
       it "creates a RGBA value from 16bit values for red, green, blue" do
         rgba = RGBA.new(32_u16, 156_u16, 221_u16)
-        rgba.red.should eq 32_u16
-        rgba.green.should eq 156_u16
-        rgba.blue.should eq 221_u16
-        rgba.alpha.should eq UInt16::MAX
+        rgba.r.should eq 32_u16
+        rgba.g.should eq 156_u16
+        rgba.b.should eq 221_u16
+        rgba.a.should eq UInt16::MAX
       end
 
-      it "creates a RGBA value from 16bit values for grayscale" do
-        rgba = RGBA.new(156_u16, 156_u16)
-        rgba.red.should eq 156_u16
-        rgba.green.should eq 156_u16
-        rgba.blue.should eq 156_u16
-        rgba.alpha.should eq 156_u16
-      end
+      # TODO: remove this test. why should we support this constructor?
+      # it "creates a RGBA value from 16bit values for grayscale" do
+      #   rgba = RGBA.new(156_u16, 156_u16)
+      #   rgba.r.should eq 156_u16
+      #   rgba.g.should eq 156_u16
+      #   rgba.b.should eq 156_u16
+      #   rgba.a.should eq 156_u16
+      # end
 
       it "creates a placeholder RGBA value from nothing" do
         rgba = RGBA.new
-        rgba.red.should eq 0_u16
-        rgba.green.should eq 0_u16
-        rgba.blue.should eq 0_u16
-        rgba.alpha.should eq 0_u16
+        rgba.r.should eq 0_u16
+        rgba.g.should eq 0_u16
+        rgba.b.should eq 0_u16
+        rgba.a.should eq 0_u16
       end
 
     end
