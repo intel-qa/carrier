@@ -1,4 +1,4 @@
-module Image::Carrier
+module IntelQA::Carrier
   struct RGBA
     # Create a `RGBA` struct from n-bit red, green and blue values
     def self.from_rgb_n(r, g, b, n)

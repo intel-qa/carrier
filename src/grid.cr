@@ -1,4 +1,4 @@
-module Image::Carrier
+module IntelQA::Carrier
 
   # TODO: move pixel types out grid
   # don't use this until it is moved. 
@@ -113,6 +113,18 @@ module Image::Carrier
         true
       else
         false
+      end
+    end
+
+    def max
+      self.reduce T::MIN do |max, v|
+        max < v ? v : max
+      end
+    end
+  
+    def min
+      self.reduce T::MAX do |min, v|
+        min > v ? v : min
       end
     end
 
@@ -346,28 +358,4 @@ module Image::Carrier
       end
     end
   end
-
-  module Math
-    def max(grid : Grid(T))
-      grid.reduce T::MIN do |max, v|
-        max < v ? v : max
-      end
-    end
-
-    def min(grid : Grid(T))
-      grid.reduce T::MAX do |min, v|
-        min > v ? v : min
-      end
-    end
-
-    def log(grid : Grid(T))
-
-    end
-  end
 end
-
-# struct UInt32
-#   def +(grid: Grid(T))
-    
-#   end
-# end

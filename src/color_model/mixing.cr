@@ -1,4 +1,4 @@
-module Image::Carrier
+module IntelQA::Carrier
   struct RGBA
     # Linear interpolation
     # (mixing) of two colors.

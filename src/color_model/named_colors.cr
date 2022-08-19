@@ -1,4 +1,4 @@
-module Image::Carrier
+module IntelQA::Carrier
   struct RGBA
     ALICEBLUE            = RGBA.from_hex("#F0F8FF")
     ANTIQUEWHITE         = RGBA.from_hex("#FAEBD7")

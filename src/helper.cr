@@ -1,8 +1,10 @@
-module Image::Carrier
+module IntelQA::Carrier
   module Helper
     def self.max_graylevel(resolution = 16)
       2 ** resolution - 1
     end
+
+    MAX_GRAYLEVEL = 2 * max_graylevel - 1
 
     # Helper method,
     # scale a of `input`

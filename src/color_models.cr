@@ -1,7 +1,7 @@
 include Crystal
 
-module Image::Carrier
-  macro define_color_model(name, components, alpha = false, abbreviate = true)
+module IntelQA::Carrier
+  macro define_color_model(name, components, alpha = false, abbreviate = true, scale_size = 16)
     struct {{name}}
       {%
         parameters = [] of Macros::StringLiteral
@@ -9,14 +9,14 @@ module Image::Carrier
         component_abbreviations = {} of Macros::StringLiteral => Macros::StringLiteral
       %}
       {% for component in components %}
-        {% parameters << "@" + component + " : UInt16" %}
-        {% max_arguments << "UInt16::MAX" %}
+        {% parameters << "@" + component + " : UInt" + scale_size.stringify %}
+        {% max_arguments << "UInt" + scale_size.stringify + "::MAX" %}
 
         {% if abbreviate %}
           {% component_abbreviations[component[0..0]] = component %}
         {% end %}
 
-        getter {{component.id}} : UInt16
+        getter {{component.id}} : UInt{{scale_size}}
       {% end %}
 
       {% if abbreviate && (component_abbreviations.size != components.size || component_abbreviations.keys.includes?("a")) %}
@@ -24,14 +24,17 @@ module Image::Carrier
       {% end %}
 
       {% if alpha %}
-        {% parameters << "@alpha = UInt16::MAX" %}
+        {% parameters << "@alpha = UInt" + scale_size.stringify + "::MAX" %}
 
-        getter alpha : UInt16
+        getter alpha : UInt{{scale_size}}
       {% end %}
 
       NULL = {{name}}.new
       MIN = {{name}}.new
       MAX = {{name}}.new({{max_arguments}})
+
+      RESOLUTION = {{scale_size}}
+      MAX_INTENSITY = {{2^scale_size - 1}}
 
       def initialize
         {% for component in components %}
@@ -39,7 +42,7 @@ module Image::Carrier
         {% end %}
 
         {% if alpha %}
-          @alpha = UInt16::MAX
+          @alpha = UInt{{scale_size}}::MAX
         {% end %}
       end
 

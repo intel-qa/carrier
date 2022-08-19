@@ -1,4 +1,4 @@
-module Image::Carrier
+module IntelQA::Carrier
   struct RGBA
     # Create a `RGBA` struct from a hex color string.
     #

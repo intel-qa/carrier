@@ -2,6 +2,10 @@ struct Int32
   NULL = Int32.new(0)
 end
 
+struct UInt16
+  NULL = UInt16.new(0)
+end
+
 struct Proc
   def <<(block : Proc(*U, V)) forall U, V
     Proc(*T, V).new { |arg| call(block.call(arg)) }

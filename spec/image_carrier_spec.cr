@@ -1,8 +1,8 @@
 require "./spec_helper"
 
-include Image::Carrier
+include IntelQA::Carrier
 
-describe Image::Carrier do
+describe IntelQA::Carrier do
   describe "Grid(RGBA)" do
     describe ".new" do
       it "throws an error if the size is to big" do

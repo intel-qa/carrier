@@ -1,4 +1,4 @@
-module Image::Carrier
+module IntelQA::Carrier
   struct RGBA
     # Create a RGBA struct from
     # float values `r`, `g`, `b`, `a`
